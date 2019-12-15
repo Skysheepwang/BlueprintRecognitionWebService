@@ -1,0 +1,14 @@
+{% extends "view.html" %}
+
+{% block sidebar %}
+    <li class="active"><a href="/result?name={{filename}}&method=member">构件</a></li>
+    <li><a href="/result?name={{filename}}&method=space">空间</a></li>
+    <li><a href="/result?name={{filename}}&method=text">文本</a></li>
+{% endblock %}
+
+{% block result %}
+    <p>
+        <button type="button" class="btn btn-primary btn-lg ">门</button>
+        <button type="button" class="btn btn-primary btn-lg active">烟雾报警器</button>
+    </p>
+{% endblock %}

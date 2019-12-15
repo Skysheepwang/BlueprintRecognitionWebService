@@ -1,0 +1,79 @@
+{% extends "view.html" %}
+
+{% block sidebar %}
+    <li><a href="/result?name={{filename}}.pdf&method=member">构件</a></li>
+    <li class="active"><a href="/result?name={{filename}}.pdf&method=space">空间</a></li>
+    <li><a href="/result?name={{filename}}.pdf&method=text">文本</a></li>
+{% endblock %}
+
+{% block result %}
+    <style>
+        #container{
+            position:relative;
+        }
+        #blueprint{
+            position:absolute;
+            z-index:1;
+        }
+        #canvas{
+            position:absolute;
+            z-index:2;
+        }
+    </style>
+
+
+    <p>
+        <button type="button" class="btn btn-primary btn-lg ">下载JSON</button>
+    </p>
+
+    <div id="container">
+        <img id="blueprint" src="/media/{{filename}}.jpg" width="{{width}}" height="{{height}}">
+        <div id="canvas"></div>
+    </div>
+
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"> </script>
+    <script>
+        const colors =   ["#37A2DA", "#32C5E9", "#96BFFF", "#67E0E3", "#9FE6B8", "#dd6b66",
+                        "#ff9f7f", "#fb7293", "#FFDB5C", "#E062AE", "#E690D1", "#e7bcf3",
+                        "#9d96f5", "#8378EA"];
+        let width = {{ width }};
+        let height = {{ height }};
+        let paper = Raphael("canvas", width, height);
+
+        let rects = {{ rects }};
+        //let edges = {{ edges }};
+        let grouped_edges = {{ grouped_edges }}
+        //for (i = 0; i < edges.length; i++) {
+        //    let rect0 = paper.rect(edges[i][0],edges[i][1],edges[i][2],edges[i][3], 0).attr({
+        //    "fill": "blue",
+        //    "stroke": "blue",
+        //    "stroke-width": 1
+        //    });
+        //}
+        for (i = 0; i < grouped_edges.length; i++) {
+            let color_index = i;
+            if (i >= colors.length) {
+                color_index = i - colors.length;
+            }
+            for(j = 0; j < grouped_edges[i].length; j++) {
+                let rect0 = paper.rect(grouped_edges[i][j][0],grouped_edges[i][j][1],
+                                        grouped_edges[i][j][2],grouped_edges[i][j][3], 0).attr({
+                    "fill": colors[color_index],
+                    "stroke": colors[color_index],
+                    "stroke-width": 10,
+                    "opacity": 0.5
+                });
+            }
+        }
+        for (i = 0; i < rects.length; i++) {
+            let rect0 = paper.rect(rects[i][0],rects[i][1],rects[i][2],rects[i][3], 0).attr({
+                "fill": "blue",
+                "stroke": "blue",
+                "stroke-width": 3,
+                "opacity": 0.5
+            });
+        }
+
+    </script>
+{% endblock %}

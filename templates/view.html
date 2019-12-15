@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block mainbody %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    {% block sidebar %}
+                        <li><a href="/result?name={{filename}}&method=member">构件</a></li>
+                        <li><a href="/result?name={{filename}}&method=space">空间</a></li>
+                        <li><a href="/result?name={{filename}}&method=text">文本</a></li>
+                    {% endblock %}
+                </ul>
+            </div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            {% block result %}
+            <h1>文件基本信息</h1>
+            <ul>
+                <li>文件名：{{ filename }}</li>
+                {% comment %} <li>上传时间：</li> {% endcomment %}
+                <li>最近控件处理时间：{{ member_time }}</li>
+                <li>最近空间处理时间：{{ space_time }}</li>
+                <li>最近文本处理时间：{{ text_time }}</li>
+            </ul>
+
+            <h1>检测结果概览</h1>
+            <ul>
+                <li>检测到的Edge_groups数：{{ edge_group_num }}</li>
+                <li>检测到的Edges数：{{ edge_num }}</li>
+                <li>检测到的solid_wall数：{{ solid_wall_num }}</li>
+                <li>检测到的文本数：{{ text_num }}</li>
+            </ul>
+            {% endblock %}
+		</div>
+      </div>
+    </div>
+
+{% endblock %}
