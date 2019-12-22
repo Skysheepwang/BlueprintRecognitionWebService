@@ -14,7 +14,7 @@
             {% csrf_token %}
             <div>
                 <p>
-                    <strong>请上传图纸文件</strong>
+                    <strong>请上传PDF或JPG文件</strong>
                     <input type="file" name="file">
                     <input type="submit" value="提交">
                 </p>
@@ -63,8 +63,6 @@
     <script>
         function submitForm() {
           // jquery 表单提交
-            let tab=document.getElementById('tab');
-            let tr_add=tab.insertRow(1);
             $("#upload").ajaxSubmit(function(message) {
                 // 对于表单提交成功后处理，message为表单正常提交后返回的内容
                 alert("图纸已上传成功!");

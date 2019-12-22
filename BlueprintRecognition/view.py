@@ -16,24 +16,33 @@ def index(request):
     if request.method == 'POST':
         # Save the uploaded pdf file into /blueprints
         fe = request.FILES.get('file', None)
-        time_now = datetime.now()
-        filename = 'blueprint_' + time_now.strftime('%Y-%m-%d_%H-%M-%S')
-        pdf_path = 'blueprints/' + filename + '.pdf'
         if fe:
-            with open(pdf_path, 'wb') as f:
-                for chunk in fe.chunks():
-                    f.write(chunk)
+            time_now = datetime.now()
+            filename = time_now.strftime('%Y-%m-%d %H-%M-%S_') + fe.name
+            pdf_path = 'blueprints/' + filename
+            jpg_path = 'media/' + filename
             
-            # Turn pdf file to jpg
-            with Image(filename=pdf_path, resolution=400) as img:
-                with img.convert('jpg') as converted:
-                    converted.save(filename='media/'+ filename + '.jpg')
+            if(fe.name[-4:] == '.pdf'):
+                with open(pdf_path, 'wb') as f:
+                    for chunk in fe.chunks():
+                        f.write(chunk)
+                # Turn pdf file to jpg
+                with Image(filename=pdf_path, resolution=400) as img:
+                    with img.convert('jpg') as converted:
+                        converted.save(filename=jpg_path[:-4] + '.jpg')
+            elif(fe.name[-4:] == '.jpg'):
+                with open(jpg_path, 'wb') as f:
+                    for chunk in fe.chunks():
+                        f.write(chunk)
+            else:
+                # Wrong file format
+                pass
 
-            return HttpResponse(filename + '.pdf')
+            return HttpResponse(filename)
 
     # Using ?name=FILENAME&method=METHOD to POST image and get json
     blueprint_name = str(request.GET.get('name', '0'))
-    name = blueprint_name[:-4] # remove '.pdf'
+    name = blueprint_name[:-4] # remove '.jpg'
     method = str(request.GET.get('method', '0'))
     if (blueprint_name != '0'):
         if (method == 'space'):
@@ -48,7 +57,7 @@ def index(request):
     else:
         # Using filenames in /blueprints to render table
         filenames = []
-        for _, _, files in os.walk('./blueprints'):
+        for _, _, files in os.walk('./media'):
             filenames = files
         # Check if is processed
         json_names = []
@@ -212,7 +221,8 @@ def result_text(request, blueprint_name):
                 path_text = {}
                 path_text['path'] = path
                 path_text['start'] = res['Polygon'][0]
-                if is_Chinese(res['DetectedText']):
+                #if is_Chinese(res['DetectedText']):
+                if True:
                     path_text['text'] = res['DetectedText']
                 else:
                     path_text['text'] = '0'
