@@ -90,9 +90,9 @@ def result(request):
         # TODO Show process time
         if (blueprint_name != '0'):
             # upload_time = '-'
-            member_process_time = ''
-            space_process_time = ''
-            text_process_time = ''
+            member_process_status = ''
+            space_process_status = ''
+            text_process_status = ''
 
             edge_group_number = ''
             edge_number = ''
@@ -107,9 +107,10 @@ def result(request):
                 solid_wall_number = str(len(result['solid_walls']['others']) +
                                         len(result['solid_walls']['rectangle']) +
                                         len(result['solid_walls']['square']))
+                space_process_status = '已处理'
             except FileNotFoundError:
                 # Blueprint is not processed yet
-                space_process_time = '未处理'
+                space_process_status = '未处理'
                 edge_group_number = '未处理'
                 edge_number = '未处理'
                 solid_wall_number = '未处理'
@@ -118,13 +119,14 @@ def result(request):
                 with open('jsons/'+blueprint_name[:-4]+'_text.json', 'r', encoding='UTF-8') as f:
                     result = json.load(f)
                 text_number = str(len(result["TextDetections"]))
+                text_process_status = '已处理'
             except FileNotFoundError:
                 # Blueprint is not processed yet
-                text_process_time = '未处理'
+                text_process_status = '未处理'
                 text_number = '未处理'
 
-            return render(request, 'view.html', {"filename": blueprint_name, "member_time":member_process_time,
-                                                "space_time": space_process_time, "text_time": text_process_time,
+            return render(request, 'view.html', {"filename": blueprint_name, "member_status":member_process_status,
+                                                "space_status": space_process_status, "text_status": text_process_status,
                                                 "edge_group_num": edge_group_number, "edge_num": edge_number,
                                                 "solid_wall_num": solid_wall_number, "text_num": text_number})
     elif (method == 'member'):
