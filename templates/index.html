@@ -65,7 +65,12 @@
           // jquery 表单提交
             $("#upload").ajaxSubmit(function(message) {
                 // 对于表单提交成功后处理，message为表单正常提交后返回的内容
-                alert("图纸已上传成功!");
+                if(message = "Wrong Format") {
+                    alert("图纸格式错误!");
+                }
+                else {
+                    alert("图纸已上传成功!");
+                }
                 location.reload();
             });
             return false; // 必须返回false，否则表单会自己再做一次提交操作，并且页面跳转

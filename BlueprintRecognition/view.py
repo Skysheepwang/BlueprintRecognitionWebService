@@ -36,7 +36,7 @@ def index(request):
                         f.write(chunk)
             else:
                 # Wrong file format
-                pass
+                return HttpResponse('Wrong Format')
 
             return HttpResponse(filename)
 
